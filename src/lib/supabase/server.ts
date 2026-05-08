@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { demoUser, isDemoMode } from "@/lib/demo";
 
 interface CookieToSet {
   name: string;
@@ -32,6 +33,7 @@ export async function createSupabaseServerClient() {
 }
 
 export async function getCurrentUser() {
+  if (isDemoMode()) return demoUser();
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
   return data.user;

@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isDemoMode } from "@/lib/demo";
 
 interface CookieToSet {
   name: string;
@@ -11,6 +12,16 @@ const PUBLIC_PATHS = ["/login", "/api/auth", "/api/cron", "/manifest.webmanifest
 
 export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request });
+
+  if (isDemoMode()) {
+    const { pathname } = request.nextUrl;
+    if (pathname === "/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/today";
+      return NextResponse.redirect(url);
+    }
+    return response;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co",

@@ -18,7 +18,24 @@ Dashboard personal mobile-first que convierte metas anuales en una decisión cla
 
 Salud · Trabajo · Emprendimiento/Proyectos · Redes Sociales · Relaciones · Finanzas · Estudio · Espiritual · Lectura.
 
-## Setup local
+## Demo local (sin cuentas externas)
+
+Levanta Postgres en docker, aplica migraciones, siembra un usuario demo con 3 metas, 2 hábitos (con streak de 5 días), métricas y check-ins de 14 días. No requiere Supabase, Anthropic, Google ni Microsoft.
+
+```bash
+npm install
+npm run demo:setup    # docker up + migrate + seed-demo
+npm run demo          # http://localhost:3000 ya autenticado
+npm run demo:down     # apagar Postgres del docker
+```
+
+En modo demo:
+
+- `DEMO_MODE=true` desactiva Supabase Auth y devuelve un usuario fijo (`Demo Ricxvos`).
+- El plan diario se genera **solo con reglas deterministas** (sin llamar a Claude).
+- Se omite el envío de Web Push real.
+
+## Setup local con servicios reales
 
 ```bash
 npm install

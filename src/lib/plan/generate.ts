@@ -3,6 +3,7 @@ import { z } from "zod";
 import { anthropic, CLAUDE_MODEL, recordUsage, dailyAiCallCount, maxAiCallsPerDay } from "@/lib/ai/claude";
 import { SYSTEM_PROMPT, buildUserContent, type DailyPromptContext } from "@/lib/ai/prompts/daily-plan";
 import type { RulePlanItem } from "@/lib/plan/rule-based-plan";
+import { isDemoMode } from "@/lib/demo";
 
 const aiPlanSchema = z.object({
   tone: z.enum(["warm", "neutral", "demanding"]),
@@ -51,6 +52,10 @@ export interface GenerateOptions {
 }
 
 export async function generateAiDailyPlan(opts: GenerateOptions): Promise<AiDailyPlan> {
+  if (isDemoMode() || !process.env.ANTHROPIC_API_KEY) {
+    return rulePlanToAiPlan(opts.rulePlan, opts.context.tone);
+  }
+
   const used = await dailyAiCallCount(opts.userId);
   if (used >= maxAiCallsPerDay()) {
     throw new Error("Cuota de llamadas a Claude alcanzada para hoy.");
@@ -106,4 +111,34 @@ export async function generateAiDailyPlan(opts: GenerateOptions): Promise<AiDail
   }
   const payload = JSON.parse(text.slice(jsonStart, jsonEnd + 1));
   return aiPlanSchema.parse(payload);
+}
+
+function rulePlanToAiPlan(
+  rulePlan: RulePlanItem[],
+  tone: "warm" | "neutral" | "demanding",
+): AiDailyPlan {
+  const goals = rulePlan.filter((p) => p.kind === "goal").slice(0, 5);
+  const habits = rulePlan.filter((p) => p.kind === "habit");
+
+  const summary =
+    tone === "warm"
+      ? "Vas en ritmo. Hoy concéntrate en lo que ya sabes que mueve la aguja."
+      : tone === "neutral"
+        ? "Estás un poco por debajo del paso. Acción puntual hoy te regresa al ritmo."
+        : "Llevas días por debajo del ritmo. Hoy es un punto de reseteo: lo más importante primero, sin excusas.";
+
+  return {
+    tone,
+    summary,
+    priorities: goals.map((g, idx) => ({
+      refId: g.refId,
+      kind: g.kind,
+      title: g.title,
+      rationale: g.rationale,
+      estMinutes: g.estMinutes ?? null,
+      priority: g.priority - idx * 0.001,
+    })),
+    habits: habits.map((h) => ({ refId: h.refId, title: h.title, note: "" })),
+    scopeProposals: [],
+  };
 }
