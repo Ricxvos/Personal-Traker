@@ -1,0 +1,88 @@
+export const es = {
+  app: {
+    name: "Personal Tracker",
+    tagline: "Tu coach diario impulsado por IA.",
+  },
+  nav: {
+    today: "Hoy",
+    goals: "Metas",
+    habits: "Hábitos",
+    progress: "Progreso",
+    integrations: "Integraciones",
+  },
+  today: {
+    title: "Plan de hoy",
+    empty: "Aún no tienes plan. Configura tus metas en el onboarding.",
+    completedAll: "¡Día limpio! Has completado todo lo prioritario.",
+    quickCheckIn: "Check-in rápido",
+    morning: "Mañana",
+    midday: "Mediodía",
+    evening: "Noche",
+    advance: "Avancé",
+    keep: "Mantuve",
+    regress: "Retrocedí",
+  },
+  goals: {
+    title: "Metas",
+    annual: "Anual",
+    quarter: "Trimestre",
+    week: "Semana",
+    day: "Día",
+    new: "Nueva meta",
+    pacing: {
+      ahead: "Adelantado",
+      onTrack: "En ritmo",
+      behind: "Atrasado",
+      criticallyBehind: "Muy atrasado",
+    },
+    scope: {
+      proposalTitle: "Propuesta de la IA",
+      proposalBody:
+        "Llevas 14 días bajo el ritmo necesario. ¿Quieres ajustar la meta?",
+      reduce: "Reducir target",
+      rephase: "Re-fasear",
+      archive: "Archivar como no lograda",
+      keep: "Mantener intacta",
+    },
+  },
+  habits: {
+    title: "Hábitos",
+    new: "Nuevo hábito",
+    streak: "Racha",
+    todayMark: "Marcar hoy",
+  },
+  onboarding: {
+    welcome: "Bienvenido",
+    intro:
+      "Vamos a definir 1 meta anual por área y elegir las métricas que vas a seguir. Toma menos de 5 minutos.",
+    askGoal: "¿Cuál es tu meta anual en {area}?",
+    askWhy: "¿Por qué te importa?",
+    suggestMetrics: "Métricas sugeridas para esta meta",
+    optionalHabit: "Define un hábito diario (opcional)",
+    next: "Siguiente",
+    back: "Atrás",
+    finish: "Terminar",
+  },
+  areas: {
+    health: "Salud",
+    work: "Trabajo",
+    venture: "Emprendimiento/Proyectos",
+    social: "Redes Sociales",
+    relationships: "Relaciones",
+    finance: "Finanzas",
+    study: "Estudio",
+    spiritual: "Espiritual",
+    reading: "Lectura",
+  },
+  cta: {
+    save: "Guardar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    confirm: "Confirmar",
+    enable: "Activar",
+    disable: "Desactivar",
+    enableNotifications: "Activar notificaciones",
+  },
+} as const;
+
+export type Translations = typeof es;
