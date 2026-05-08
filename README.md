@@ -1,10 +1,12 @@
 # Personal Tracker
 
+[![CI](https://github.com/Ricxvos/Personal-Traker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ricxvos/Personal-Traker/actions/workflows/ci.yml)
+
 Dashboard personal mobile-first que convierte metas anuales en una decisión clara cada día. Construido como PWA para Android (objetivo: Samsung Galaxy S24 Ultra) con plan diario híbrido (reglas deterministas + Claude Sonnet 4.6).
 
 ## Stack
 
-- **Next.js 15** (App Router) + TypeScript + Tailwind + shadcn-style UI
+- **Next.js 16** (App Router) + TypeScript + Tailwind + shadcn-style UI
 - **Supabase** (Auth + Postgres) con **Drizzle ORM**
 - **Anthropic Claude Sonnet 4.6** con prompt caching para el plan diario
 - **Web Push** (VAPID) para notificaciones nativas en Chrome Android
@@ -68,6 +70,17 @@ src/
 - `06:00 MX` (12:00 UTC) — `/api/cron/morning`: genera plan + push #1
 - `13:00 MX` (19:00 UTC) — `/api/cron/midday`: re-prioriza + push #2
 - `21:00 MX` (03:00 UTC siguiente) — `/api/cron/evening`: pide reflexión + push #3
+
+## Verificación
+
+```bash
+npm run lint        # ESLint flat config (eslint-config-next)
+npm run typecheck   # tsc --noEmit
+npm test            # vitest run (pacing + scope-advisor)
+npm run build       # next build
+```
+
+CI corre los cuatro pasos en cada PR hacia `main`.
 
 ## Costos estimados
 
